@@ -115,6 +115,9 @@ namespace BayesBoom {
               return model.observation_model()->sigma();
             },
             "The residual standard deviation parameter.")
+        .def_property_readonly(
+            "has_regression", [](const StateSpaceModel &) {return false;},
+            "Indicates whether the model contains a regression component.")
         ;
 
     py::class_<StateSpaceRegressionModel,
@@ -163,6 +166,10 @@ namespace BayesBoom {
               return model.observation_model()->coef();
             },
             "The GlmCoefs object describing the regression coefficients.")
+        .def_property_readonly(
+            "has_regression", [](const StateSpaceRegressionModel &) {
+              return true;},
+            "Indicates whether the model contains a regression component.")
         ;
 
     py::class_<StateSpacePosteriorSampler,

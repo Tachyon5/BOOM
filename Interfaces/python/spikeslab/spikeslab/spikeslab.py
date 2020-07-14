@@ -6,7 +6,7 @@ import scipy.sparse
 import R
 
 
-def dot(data_frame, omit=[]):
+def dot(data_frame, omit=None):
     """
     Build a formula string by "summing" all entries except those on an 'omit
     list'.  This would typically include the name of the variable on the left
@@ -42,6 +42,9 @@ def dot(data_frame, omit=[]):
       # Returns "y ~ (X1 + X2 + X3)**2"
 
     """
+
+    if omit is None:
+        omit = []
 
     # Allow 'omit' to be a string, for the common case where there is just one
     # name to omit.

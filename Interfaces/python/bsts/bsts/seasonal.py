@@ -104,7 +104,7 @@ class SeasonalStateModel(StateModel):
             self._state_index, :]
 
     def plot_state_contribution(
-            self, fig, gridspec, time, burn, ylim, **kwargs):
+            self, fig, gridspec, time, burn=None, ylim=None, **kwargs):
         if self.nseasons == 7 and self.season_duration == 1:
             return self._plot_day_of_week_cycle(
                 fig=fig, gridspec=gridspec, time=time, burn=burn,

@@ -307,11 +307,23 @@ class Bsts:
                         **kwargs)
                 plot_index += 1
 
-    def predict(self, horizon, newdata):
+    def predict(self, horizon, newdata, burn=None):
         """
         Returns:
             A BstsPrediction object containing the predictions.
         """
+        if burn is None:
+            burn = self.suggest_burn()
+
+        if self._model.has_regression:
+            predictors = patsy.dmatrix(self._formula, newdata)
+
+        niter = self.niter
+        for (int it = burn; it < niter; ++it):
+            self._restore_parameters(it)
+
+
+
 
     def _record_draws(self, iteration: int):
         """
