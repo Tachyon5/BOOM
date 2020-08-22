@@ -467,6 +467,15 @@ namespace BOOM {
       return *coefficients_[time_index];
     }
 
+    // The state matrix of all coefficients at all time points.
+    Matrix coefficients() const;
+
+    // Set the sequence of coefficients to the specified values.
+    // Args:
+    //   coefficients: Rows correspond to variables.  Columns to time.  Entries
+    //     that are exactly zero will be marked as excluded.
+    void set_coefficients(const Matrix &coefficients);
+
     double draw_coefficients_given_inclusion(RNG &rng) {
       return filter_.impute_state(*this, rng);
     }

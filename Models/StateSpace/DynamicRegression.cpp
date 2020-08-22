@@ -505,4 +505,30 @@ namespace BOOM {
     innovation_variances_current_ = true;
   }
 
+  Matrix DRM::coefficients() const {
+    int nr = xdim();
+    int nc = time_dimension();
+
+    Matrix ans(nr, nc);
+    for (int t = 0; t < nc; ++t) {
+      ans.col(t) = coef(t).Beta();
+    }
+    return ans;
+  }
+
+  void DRM::set_coefficients(const Matrix &coefficients) {
+    for (int t = 0; t < coefficients.ncol(); ++t) {
+      const ConstVectorView arg(coefficients.col(t));
+      GlmCoefs &beta(coef(t));
+      beta.set_Beta(coefficients.col(t));
+      for (int j = 0; j < arg.size(); ++j) {
+        if (arg[j] == 0.0) {
+          beta.drop(j);
+        } else {
+          beta.add(j);
+        }
+      }
+    }
+  }
+
 }  // namespace BOOM

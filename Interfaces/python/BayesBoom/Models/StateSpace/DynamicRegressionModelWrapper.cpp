@@ -154,6 +154,17 @@ namespace BayesBoom {
              "Returns:\n"
              "  The  regression coefficients at time t.")
         .def_property_readonly(
+            "coefficients",
+            [](const DynamicRegressionModel &model) {return model.coefficients();},
+            "The current MCMC draw of all model coefficients.  \n"
+            "Rows are predictor variables.  Columns are time.")
+        .def("set_coefficients",
+             [](DynamicRegressionModel &model, const Matrix &coefficients) {
+               model.set_coefficients(coefficients);
+             },
+             py::arg("coefficients"),
+             "Set the model coefficients to the specified values")
+        .def_property_readonly(
             "residual_sd",
             [](const DynamicRegressionModel &model) {
               return model.residual_sd();
@@ -192,12 +203,13 @@ namespace BayesBoom {
              "    actual innovation SD."
              )
         .def("transition_probabilities",
-             [](DynamicRegressionModel &model, int pred) {
-               return model.transition_model(pred)->Q();
+             [](DynamicRegressionModel &model, int index) {
+               return model.transition_model(index)->Q();
              },
+             py::arg("index"),
              "Transition probability matrix for the requested coefficient.\n\n"
              "Args:\n"
-             "  pred:  The index of a predictor.  An integer from 0 to "
+             "  index:  The index of a predictor.  An integer from 0 to "
              "xdim - 1.\n\n"
              "Returns:\n"
              "  A Matrix containing the transition probabilities of the \n"
@@ -285,7 +297,6 @@ namespace BayesBoom {
              "  prior_inclusion_probabilities:  A Vector containing a priori "
              "estimates of the steady state inclusion probability for each "
              "coefficient.\n"
-
              "  expected_inclusion_duration: A vector of positive numbers "
              "giving the expected duration of an inclusion event.  If the "
              "prior inclusion probability for a coefficient is less than 0.5 "
